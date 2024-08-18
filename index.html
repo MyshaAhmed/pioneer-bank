@@ -13,46 +13,67 @@
 </head>
 <body>
 
-    
+    <!-- **********Login Area********* -->
      <div id="login-area">
         <h1 class="text-center">Welcome to Pioneer Bank</h1>
         <div class="submit-area">
             <h3>Login</h3>
-            <input class="form-control" type="email" name="" id="" placeholder="Email" >
+            <input class="form-control" type="email" placeholder="Email" >
             <br>
-            <input class="form-control" type="password" name="" id="" placeholder="Password">
+            <input class="form-control" type="password" placeholder="Password">
             <br>
             <button id="login" class="btn btn-success">Enter</button>
         </div>
      </div>
 
+    <!-- ***********Transaction Area***********-->
     <div id="transaction-area" class="align-items-center">
         <div class="row">
             <div class="col-md-4">
                 <div class="deposit status">
                     <h3>Deposit</h3>
-                    <h2>00$</h2>
+                    <h2>$ <span id="currentDeposit">00</span></h2>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="withdraw status">
                     <h3>Withdraw</h3>
-                    <h2>00$</h2>
+                    <h2>$ <span id="currentWithdraw">00</span></h2>
                 </div>
             </div>
             <div class="col-md-4">
                 <div  class="balance status">
-                    <h3>balance</h3>
-                    <h2>1240$</h2>
+                    <h3>Balance</h3>
+                    <h2>$<span id="currentBalance">1240</span></h2>
                 </div>
             </div>
-        </div class="row">
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="submit-area">
+                    <h4>Deposit</h4>
+                    <input id="deposit-Amount" type="text" placeholder="$ amount you want to deposit" class="form-control">
+                    <br>
+                    <button class="btn btn-success" id="deposit-Btn"> Deposit</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div  class="submit-area">
+                    <h4>Withdraw</h4>
+                    <input id="withdraw-amount" type="text" placeholder="$ amount you want to withdraw" class="form-control" >
+                    <br>
+                    <button id="withdraw-btn" class="btn btn-success"> Withdraw</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 
 
 
     <script>
+        // login event handler
         const loginBtn=document.getElementById('login');
         loginBtn.addEventListener('click',function(event){
             const loginArea=document.getElementById("login-area");
@@ -60,6 +81,49 @@
             const transactionArea=document.getElementById('transaction-area');
             transactionArea.style.display='block';
         })
+
+        // deposit button event handler
+        const depositBtn=document.getElementById('deposit-Btn');
+        depositBtn.addEventListener("click", function(event){
+            // const depositAmount=document.getElementById('deposit-Amount').value; // value nibo jokhon form input nibo
+            const depositNumber=getInputAmount('deposit-Amount');
+            // const currentDeposit=document.getElementById('currentDeposit').innerText; //jehetu span tag tai innerText nicchi
+            // const currentDepositAmount=parseFloat(currentDeposit);
+            // const totalDeposit=depositNumber+currentDepositAmount;
+            // document.getElementById('currentDeposit').innerText=totalDeposit;
+            updateSpanText('currentDeposit',depositNumber);
+            updateSpanText('currentBalance',depositNumber);
+
+            document.getElementById('deposit-Amount').value="";// to remove the deposit amount from the form
+        })
+
+        // withdraw button event handler
+        const withdrawBtn=document.getElementById('withdraw-btn');
+        withdrawBtn.addEventListener('click',function(event){
+            const withdrawAmount=getInputAmount('withdraw-amount');
+            updateSpanText('currentWithdraw',withdrawAmount);
+            // updateSpanText('currentBalance',-1*withdrawAmount);  this is another way we can use the same function of add to perform subtraction
+            
+            const currentBalance=document.getElementById('currentBalance').innerText;
+            const currentBalanceNumber=parseFloat(currentBalance);
+            const totalAmount=currentBalanceNumber-withdrawAmount;
+            document.getElementById('currentBalance').innerText = totalAmount;
+            document.getElementById('withdraw-amount').value = "";
+        })
+
+
+        function getInputAmount(id){
+            const inputAmount = document.getElementById(id).value; // value nibo jokhon form input nibo
+            const inputNumber = parseFloat(inputAmount);
+            return inputNumber;
+        }
+
+        function updateSpanText(id, inputAmount){
+            const current = document.getElementById(id).innerText; //jehetu span tag tai innerText nicchi
+            const currentAmount = parseFloat(current);
+            const totalAmount = inputAmount+ currentAmount;
+            document.getElementById(id).innerText = totalAmount;
+        }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
